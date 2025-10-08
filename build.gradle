@@ -5,20 +5,24 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
-        
+
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = "1.0"
-group = "com.yourname.modid"
-archivesBaseName = "modid"
+version = '1.0'
+group = 'com.yourname.modid'
+archivesBaseName = 'modid'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
 minecraft {
-	mappings channel: 'snapshot', version: '20171003-1.12'
+    mappings channel: 'snapshot', version: '20171003-1.12'
+    mappings channel: 'snapshot', version: '20201028-1.16.3'
 
     runs {
         client {
@@ -54,8 +58,8 @@ sourceSets {
 }
 
 dependencies {
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
 }
 
 apply from: 'mcreator.gradle'
-
