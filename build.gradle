@@ -63,6 +63,3 @@ dependencies {
 }
 
 apply from: 'mcreator.gradle'
-
-
-
