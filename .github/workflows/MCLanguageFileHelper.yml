@@ -1,0 +1,19 @@
+            - name: MC Language File Helper
+# You may pin to the exact commit or the version.
+# uses: RedLime/mc-lang-translation-action@073885fa9bb1a5bdabba9d74f68a40a4761debf8
+uses: RedLime/mc-lang-translation-action@v2.1
+with:
+  # language files base path
+  base-path: 
+  # The directory where language files expect editable language files are created/loaded. Based on `base-path`.
+  lang-files-path: # optional, default is ./
+  # The directory where editable language files are created/loaded. Based on `base-path`.
+  editable-files-path: # optional, default is ./editable
+  # A filename suffix string to identify a language files in the `base-path` directory.
+  end-with: # optional, default is .json
+  # To be inserted before value of `end-with` in the filename to identify the editable language file.
+  editable-suffix: # optional, default is .editable
+  # To be inserted before value of `end-with` in the filename to identify the backup language file.
+  backup-suffix: # optional, default is .prev
+  # A filename without `end-with` or `*-suffix` to identify the base language file.
+  default-language: # optional, default is en_us
