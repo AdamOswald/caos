@@ -1,25 +1,32 @@
-            - name: MC-DepUp
-  # You may pin to the exact commit or the version.
-  # uses: LucunJi/mc-depup@84a57e2e0ff9b27bb16c99e1b5afec7ee5f0cca7
-  uses: LucunJi/mc-depup@v0.1.2
-  with:
-    # 'Path to the config file'
+name: MC DepUp
 
-    config_path: # optional, default is ./.github/modding-dependencies.yml
-    # 'Update patch version of Minecraft'
-'true | false'
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run without writing changes'
+        type: boolean
+        default: true
+  schedule:
+    - cron: '0 6 * * 1'  # every Monday at 06:00 UTC
 
-    update_mc_patch: # optional, default is true
-    # 'Update only when Minecraft updates (depends on update_mc_patch)'
-'true | false'
+jobs:
+  mc-depup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    update_only_with_mc: # optional
-    # 'Allow the update of any dependency to fail'
-'true | false'
-
-    tolerable: # optional
-    # 'The new configuration is not written to the file'
-'true | false'
-
-    dry_run: # optional
-          
+      - name: MC-DepUp
+        uses: LucunJi/mc-depup@v0.1.2
+        with:
+          # Path to the modding dependency configuration file
+          config_path: .github/modding-dependencies.yml
+          # Set to false if you do not want to bump Minecraft patch versions automatically
+          update_mc_patch: true
+          # Only update dependencies when Minecraft itself updates
+          update_only_with_mc: false
+          # Allow dependency update failures without failing the workflow
+          tolerable: false
+          # Override dry-run via workflow_dispatch input
+          dry_run: ${{ github.event.inputs.dry_run || 'true' }}
