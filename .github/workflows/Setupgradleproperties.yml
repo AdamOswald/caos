@@ -1,0 +1,8 @@
+            - name: Setup gradle.properties file
+  # You may pin to the exact commit or the version.
+  # uses: SimonMarquis/ci-gradle-properties-action@e0141d19206f7c9dbfe2969f8ad583debaa7307c
+  uses: SimonMarquis/ci-gradle-properties-action@v1
+  with:
+    # Gradle properties file path
+    path: # default is .github/gradle.properties
+          
