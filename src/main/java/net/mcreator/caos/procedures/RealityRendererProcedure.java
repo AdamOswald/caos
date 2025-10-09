@@ -27,7 +27,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		}
 		Entity entity = (Entity) dependencies.get("entity");
 		Entity sourceentity = (Entity) dependencies.get("sourceentity");
-		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:sword").toLowerCase(java.util.Locale.ENGLISH))).contains(
+		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
 					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) != 0))) {
