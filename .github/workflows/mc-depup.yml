@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: MC-DepUp
-        uses: LucunJi/mc-depup@v0.1.2
+        uses: LucunJi/mc-depup@84a57e2e0ff9b27bb16c99e1b5afec7ee5f0cca7
         with:
           # Path to the modding dependency configuration file
           config_path: .github/modding-dependencies.yml
