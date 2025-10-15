@@ -13,6 +13,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		super(instance, 2);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+  private static final ThreadLocal<Boolean> IN_RENDERER = ThreadLocal.withInitial(() -> false);
 
 	public static void executeProcedure(Map<String, Object> dependencies) {
 		if (dependencies.get("entity") == null) {
@@ -29,10 +30,10 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		Entity sourceentity = (Entity) dependencies.get("sourceentity");
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
-			if (((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) != 0))) {
+			if (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
+					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) == 0) {
 				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-						.addEnchantment(RealitySplitterEnchantment.enchantment, (int) 1);
+						.addEnchantment(RealitySplitterEnchantment.enchantment, 1);
 				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)).setDamage(
 						(int) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
 								.getDamage())
@@ -43,17 +44,23 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 										+ 0.5))));
 			}
 		}
-			entity.attackEntityFrom(DamageSource.GENERIC,
-					(float)((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)
-							.getDamage())
-							+ (6.75 * (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-									((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-									+ 0.5))));
+      try {
+        IN_RENDERER.set(true);
+        entity.attackEntityFrom(DamageSource.GENERIC,
+            (float)((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getDamage())
+              + (6.75 * (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
+                  ((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) + 0.5))));
+      } finally {
+        IN_RENDERER.set(false);
+      }
 }
 
 	@SubscribeEvent
 	public void onEntityAttacked(LivingAttackEvent event) {
 		if (event != null && event.getEntity() != null) {
+          if (IN_RENDERER.get()) {
+            return; // avoid re-entrant damage loop
+        }
 			Entity entity = event.getEntity();
 			Entity sourceentity = event.getSource().getTrueSource();
 			Entity imediatesourceentity = event.getSource().getImmediateSource();
