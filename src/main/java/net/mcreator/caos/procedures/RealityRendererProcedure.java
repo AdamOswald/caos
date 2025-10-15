@@ -32,25 +32,34 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) == 1+) {
+					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) == 0) {
 				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
 						.addEnchantment(RealitySplitterEnchantment.enchantment, 1);
-				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-						(int) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-								)
-								+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-										((sourceentity instanceof LivingEntity)
-												? ((LivingEntity) sourceentity).getHeldItemMainhand()
-												: ItemStack.EMPTY)))
-										+ 0.5))));
-			}
+                ItemStack stack = (sourceentity instanceof LivingEntity)
+                    ? ((LivingEntity) sourceentity).getHeldItemMainhand()
+                    : ItemStack.EMPTY;
+                int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
+                int extra = (int) Math.round(6.75 * (level + 0.5));
+                if (!stack.isEmpty()) {
+                  stack.setDamage(stack.getDamage() + extra);
+				}
+            }
 		}
       try {
         IN_RENDERER.set(true);
-        entity.attackEntityFrom(event.getSource(),
-            (float)((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-              + (6.75 * (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-                  ((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) + 0.5))));
+        net.minecraft.util.DamageSource src =
+            (dependencies.get("event") instanceof net.minecraftforge.event.entity.living.LivingAttackEvent)
+                ? ((net.minecraftforge.event.entity.living.LivingAttackEvent) dependencies.get("event")).getSource()
+                : net.minecraft.util.DamageSource.GENERIC;
+        ItemStack stack = (sourceentity instanceof LivingEntity)
+            ? ((LivingEntity) sourceentity).getHeldItemMainhand()
+            : ItemStack.EMPTY;
+        int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
+        double base = (dependencies.get("amount") instanceof Number)
+            ? ((Number) dependencies.get("amount")).doubleValue()
+            : 0.0;
+        float finalDamage = (float) (base + (6.75 * (level + 0.5)));
+        entity.attackEntityFrom(src, finalDamage);
       } finally {
         IN_RENDERER.set(false);
       }
