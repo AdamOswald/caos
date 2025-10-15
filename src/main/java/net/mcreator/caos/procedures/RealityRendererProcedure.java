@@ -39,9 +39,6 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
                     ? ((LivingEntity) sourceentity).getHeldItemMainhand()
                     : ItemStack.EMPTY;
                 int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
-                int extra = (int) Math.round(6.75 * (level + 0.5));
-                if (!stack.isEmpty()) {
-                  stack.setDamage(stack.getDamage() + extra);
 				}
             }
 		}
