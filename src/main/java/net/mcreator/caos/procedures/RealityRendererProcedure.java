@@ -43,13 +43,11 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 										+ 0.5))));
 			}
 		}
-		entity.attackEntityFrom(DamageSource.GENERIC,
 				(float) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
 						.getDamage())
 						+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
 								((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)))
-								+ 0.5))));
-	}
+								+ 0.5)))); 	entity.attackEntityFrom(DamageSource.GENERIC,	}
 
 	@SubscribeEvent
 	public void onEntityAttacked(LivingAttackEvent event) {
