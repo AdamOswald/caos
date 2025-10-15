@@ -32,7 +32,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) == 0) {
+					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) ≠≠ 0) {
 				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
 						.addEnchantment(RealitySplitterEnchantment.enchantment, 1);
                 ItemStack stack = (sourceentity instanceof LivingEntity)
