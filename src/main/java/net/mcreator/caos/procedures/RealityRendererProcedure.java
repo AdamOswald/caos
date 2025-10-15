@@ -13,6 +13,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		super(instance, 2);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+  // Tracks whether we're currently inside executeProcedure to prevent re-entrant damage loops
   private static final ThreadLocal<Boolean> IN_RENDERER = ThreadLocal.withInitial(() -> false);
 
 	public static void executeProcedure(Map<String, Object> dependencies) {
@@ -31,12 +32,12 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) == 0) {
+					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) == 1+) {
 				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
 						.addEnchantment(RealitySplitterEnchantment.enchantment, 1);
-				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)).setDamage(
+				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
 						(int) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-								.getDamage())
+								)
 								+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
 										((sourceentity instanceof LivingEntity)
 												? ((LivingEntity) sourceentity).getHeldItemMainhand()
@@ -46,8 +47,8 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		}
       try {
         IN_RENDERER.set(true);
-        entity.attackEntityFrom(DamageSource.GENERIC,
-            (float)((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getDamage())
+        entity.attackEntityFrom(event.getSource(),
+            (float)((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
               + (6.75 * (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
                   ((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) + 0.5))));
       } finally {
