@@ -33,8 +33,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
 					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) != 0) {
-				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-						.addEnchantment(RealitySplitterEnchantment.enchantment, 1);
+				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY));
                 ItemStack stack = (sourceentity instanceof LivingEntity)
                     ? ((LivingEntity) sourceentity).getHeldItemMainhand()
                     : ItemStack.EMPTY;
