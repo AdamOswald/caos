@@ -52,12 +52,18 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
             ? ((LivingEntity) sourceentity).getHeldItemMainhand()
             : ItemStack.EMPTY;
         int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
-        double base = (dependencies.get("amount") instanceof Number)
-            ? ((Number) dependencies.get("amount")).doubleValue()
-            : 0.0;
+        double base = 0.0;
+        Object amountObj = dependencies.get("amount");
+        if (amountObj instanceof Number) {
+            base = Math.max(0.0, ((Number) amountObj).doubleValue());
+        } else {
+            CaosMod.LOGGER.warn("[RealityRenderer] 'amount' missing/invalid; defaulting to 0.0");
+        }
         float finalDamage = (float) (base + (6.75 * (level + 0.5)));
         entity.attackEntityFrom(src, finalDamage);
-      } finally {
+        if (dependencies.get("event") instanceof net.minecraftforge.event.entity.living.LivingAttackEvent) {
+            ((net.minecraftforge.event.entity.living.LivingAttackEvent) dependencies.get("event")).setCanceled(true);
+        }
         IN_RENDERER.set(false);
       }
 }
