@@ -41,7 +41,6 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
                 int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
 				}
             }
-		}
       try {
         IN_RENDERER.set(true);
         net.minecraft.util.DamageSource src =
