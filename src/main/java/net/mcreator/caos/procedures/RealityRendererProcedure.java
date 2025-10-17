@@ -61,6 +61,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
         if (dependencies.get("event") instanceof net.minecraftforge.event.entity.living.LivingAttackEvent) {
             ((net.minecraftforge.event.entity.living.LivingAttackEvent) dependencies.get("event")).setCanceled(true);
         }
+      } finally {
         IN_RENDERER.set(false);
       }
 }
