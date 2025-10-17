@@ -13,6 +13,8 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		super(instance, 2);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+  // Tracks whether we're currently inside executeProcedure to prevent re-entrant damage loops
+  private static final ThreadLocal<Boolean> IN_RENDERER = ThreadLocal.withInitial(() -> false);
 
 	public static void executeProcedure(Map<String, Object> dependencies) {
 		if (dependencies.get("entity") == null) {
@@ -29,30 +31,47 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		Entity sourceentity = (Entity) dependencies.get("sourceentity");
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
-			if (((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) != 0))) {
-				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-						.addEnchantment(RealitySplitterEnchantment.enchantment, (int) 1);
-				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)).setDamage(
-						(int) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-								.getDamage())
-								+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-										((sourceentity instanceof LivingEntity)
-												? ((LivingEntity) sourceentity).getHeldItemMainhand()
-												: ItemStack.EMPTY)))
-										+ 0.5))));
-			}
-		}
-				(float) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-						.getDamage())
-						+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-								((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)))
-								+ 0.5)))); 	entity.attackEntityFrom(DamageSource.GENERIC,
+			if (EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
+					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) != 0) {
+                ItemStack stack = (sourceentity instanceof LivingEntity)
+                    ? ((LivingEntity) sourceentity).getHeldItemMainhand()
+                    : ItemStack.EMPTY;
+                int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
+				}
+            }
+      try {
+        IN_RENDERER.set(true);
+        net.minecraft.util.DamageSource src =
+            (dependencies.get("event") instanceof net.minecraftforge.event.entity.living.LivingAttackEvent)
+                ? ((net.minecraftforge.event.entity.living.LivingAttackEvent) dependencies.get("event")).getSource()
+                : net.minecraft.util.DamageSource.GENERIC;
+        ItemStack stack = (sourceentity instanceof LivingEntity)
+            ? ((LivingEntity) sourceentity).getHeldItemMainhand()
+            : ItemStack.EMPTY;
+        int level = EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment, stack);
+        double base = 0.0;
+        Object amountObj = dependencies.get("amount");
+        if (amountObj instanceof Number) {
+            base = Math.max(0.0, ((Number) amountObj).doubleValue());
+        } else {
+            CaosMod.LOGGER.warn("[RealityRenderer] 'amount' missing/invalid; defaulting to 0.0");
+        }
+        float finalDamage = (float) (base + (6.75 * (level + 0.5)));
+        entity.attackEntityFrom(src, finalDamage);
+        if (dependencies.get("event") instanceof net.minecraftforge.event.entity.living.LivingAttackEvent) {
+            ((net.minecraftforge.event.entity.living.LivingAttackEvent) dependencies.get("event")).setCanceled(true);
+        }
+      } finally {
+        IN_RENDERER.set(false);
+      }
 }
 
 	@SubscribeEvent
 	public void onEntityAttacked(LivingAttackEvent event) {
 		if (event != null && event.getEntity() != null) {
+          if (IN_RENDERER.get()) {
+            return; // avoid re-entrant damage loop
+        }
 			Entity entity = event.getEntity();
 			Entity sourceentity = event.getSource().getTrueSource();
 			Entity imediatesourceentity = event.getSource().getImmediateSource();
