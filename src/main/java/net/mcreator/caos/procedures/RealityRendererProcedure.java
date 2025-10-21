@@ -14,6 +14,8 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		super(instance, 2);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+  // Tracks whether we're currently inside executeProcedure to prevent re-entrant damage loops
+  private static final ThreadLocal<Boolean> IN_RENDERER = ThreadLocal.withInitial(() -> false);
 
 	public static void executeProcedure(Map<String, Object> dependencies) {
 		if (dependencies.get("entity") == null) {
@@ -28,7 +30,7 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 		}
 		Entity entity = (Entity) dependencies.get("entity");
 		Entity sourceentity = (Entity) dependencies.get("sourceentity");
-		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:sword").toLowerCase(java.util.Locale.ENGLISH))).contains(
+		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
 					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)) != 0))) {
@@ -70,6 +72,9 @@ public class RealityRendererProcedure extends CaosModElements.ModElement {
 	@SubscribeEvent
 	public void onEntityAttacked(LivingAttackEvent event) {
 		if (event != null && event.getEntity() != null) {
+          if (IN_RENDERER.get()) {
+            return; // avoid re-entrant damage loop
+        }
 			Entity entity = event.getEntity();
 			Entity sourceentity = event.getSource().getTrueSource();
 			Entity imediatesourceentity = event.getSource().getImmediateSource();
