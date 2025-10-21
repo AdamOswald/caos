@@ -21,11 +21,11 @@ public class EmpoweredRiftBladeItem extends CaosModElements.ModElement {
 			}
 
 			public float getEfficiency() {
-				return 4f;
+				return 12f;
 			}
 
 			public float getAttackDamage() {
-				return 10f;
+				return 12f;
 			}
 
 			public int getHarvestLevel() {
@@ -33,7 +33,7 @@ public class EmpoweredRiftBladeItem extends CaosModElements.ModElement {
 			}
 
 			public int getEnchantability() {
-				return 2;
+				return 20;
 			}
 
 			public Ingredient getRepairMaterial() {
