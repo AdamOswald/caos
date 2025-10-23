@@ -30,13 +30,23 @@
           }
         ]
       }
+    },
+    {
+      "name": "EmpoweredRiftBlade",
+      "type": "tool",
+      "sortid": 3,
+      "compiles": true,
+      "locked_code": false,
+      "ids": ["minecraft:swords"],
+      "registry_name": "empowered_rift_blade"
     }
   ],
   "variable_elements": [],
   "sound_elements": [],
   "language_map": {
     "en_us": {
-      "enchantment.caos.reality_splitter": "Reality Splitter"
+      "enchantment.caos.reality_splitter": "Reality Splitter",
+      "item.caos.empowered_rift_blade": "Empowered Rift Blade"
     }
   },
   "foldersRoot": {
