@@ -1,5 +1,6 @@
 package net.mcreator.caos.procedures;
 
+import net.mcreator.caos.item.EmpoweredRiftBladeItem;
 import net.mcreator.caos.enchantment.RealitySplitterEnchantment;
 import net.mcreator.caos.CaosModElements;
 import net.mcreator.caos.CaosMod;
@@ -8,45 +9,39 @@ import java.util.Map;
 import java.util.HashMap;
 
 @CaosModElements.ModElement.Tag
-public class RealityRendererProcedure extends CaosModElements.ModElement {
-	public RealityRendererProcedure(CaosModElements instance) {
-		super(instance, 2);
+public class RealityRendererRiftProcedure extends CaosModElements.ModElement {
+	public RealityRendererRiftProcedure(CaosModElements instance) {
+		super(instance, 8);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public static void executeProcedure(Map<String, Object> dependencies) {
 		if (dependencies.get("entity") == null) {
 			if (!dependencies.containsKey("entity"))
-				CaosMod.LOGGER.warn("Failed to load dependency entity for procedure RealityRenderer!");
+				CaosMod.LOGGER.warn("Failed to load dependency entity for procedure RealityRendererRift!");
 			return;
 		}
 		if (dependencies.get("sourceentity") == null) {
 			if (!dependencies.containsKey("sourceentity"))
-				CaosMod.LOGGER.warn("Failed to load dependency sourceentity for procedure RealityRenderer!");
+				CaosMod.LOGGER.warn("Failed to load dependency sourceentity for procedure RealityRendererRift!");
 			return;
 		}
 		Entity entity = (Entity) dependencies.get("entity");
 		Entity sourceentity = (Entity) dependencies.get("sourceentity");
-		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("minecraft:swords").toLowerCase(java.util.Locale.ENGLISH))).contains(
+		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("caos:empowered_rift_blade").toLowerCase(java.util.Locale.ENGLISH))).contains(
 				((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			if (((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
 					((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))) != 0)) {
-				(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)).setDamage(
-						(int) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-								.getDamage())
-								+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-										((sourceentity instanceof LivingEntity)
-												? ((LivingEntity) sourceentity).getHeldItemMainhand()
-												: ItemStack.EMPTY)))
-										+ 0.5))));
+				(new ItemStack(EmpoweredRiftBladeItem.block, (int) (1)))
+						.setDamage((int) (((new ItemStack(EmpoweredRiftBladeItem.block, (int) (1))).getDamage())
+								+ (1.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
+										new ItemStack(EmpoweredRiftBladeItem.block, (int) (1)))) + 1.5))));
 			}
 		}
 		entity.attackEntityFrom(DamageSource.GENERIC,
-				(float) (((((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY))
-						.getDamage())
-						+ (6.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
-								((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY)))
-								+ 0.5))));
+				(float) (((new ItemStack(EmpoweredRiftBladeItem.block, (int) (1))).getDamage())
+						+ (1.75 * ((EnchantmentHelper.getEnchantmentLevel(RealitySplitterEnchantment.enchantment,
+								new ItemStack(EmpoweredRiftBladeItem.block, (int) (1)))) + 1.5))));
 	}
 
 	@SubscribeEvent
