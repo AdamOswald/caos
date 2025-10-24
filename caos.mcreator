@@ -37,7 +37,7 @@
       "sortid": 3,
       "compiles": true,
       "locked_code": false,
-      "ids": {},
+      "ids": ["minecraft:swords", "caos:empowered_rift_blade"]
       "registry_name": "empowered_rift_blade"
     },
     {
