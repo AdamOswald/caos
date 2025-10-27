@@ -1,7 +1,7 @@
 
 package net.mcreator.caos.item;
 
-import org.omg.CORBA.ObjectHolder;
+import net.minecraftforge.registries.ObjectHolder;
 
 import net.mcreator.caos.procedures.RiftKnockbackProcedure;
 import net.mcreator.caos.CaosModElements;
@@ -29,7 +29,7 @@ public class EmpoweredRiftBladeItem extends CaosModElements.ModElement {
 			}
 
 			public float getAttackDamage() {
-				return 10f;
+				return 12f;
 			}
 
 			public int getHarvestLevel() {
