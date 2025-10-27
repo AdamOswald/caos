@@ -20,6 +20,7 @@ public class RiftKnockbackProcedure extends CaosModElements.ModElement {
 			return;
 		}
 		Entity entity = (Entity) dependencies.get("entity");
+	    Entity sourceentity = (Entity) dependencies.get("sourceentity");
 		double speed = 0;
 		double Yaw = 0;
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("caos:empowered_rift_blade").toLowerCase(java.util.Locale.ENGLISH)))
