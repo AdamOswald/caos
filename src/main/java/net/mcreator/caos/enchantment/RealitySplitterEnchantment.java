@@ -1,8 +1,6 @@
 
 package net.mcreator.caos.enchantment;
 
-import org.omg.CORBA.ObjectHolder;
-
 import net.minecraft.enchantment.Enchantment;
 
 import net.minecraft.enchantment.EnchantmentType;
