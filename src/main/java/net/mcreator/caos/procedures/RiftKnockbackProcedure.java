@@ -20,12 +20,13 @@ public class RiftKnockbackProcedure extends CaosModElements.ModElement {
 			return;
 		}
 		Entity entity = (Entity) dependencies.get("entity");
+	    Entity sourceentity = (Entity) dependencies.get("sourceentity");
 		double speed = 0;
 		double Yaw = 0;
 		if ((ItemTags.getCollection().getTagByID(new ResourceLocation(("caos:empowered_rift_blade").toLowerCase(java.util.Locale.ENGLISH)))
-				.contains(((entity instanceof LivingEntity) ? ((LivingEntity) entity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
+				.contains(((sourceentity instanceof LivingEntity) ? ((LivingEntity) sourceentity).getHeldItemMainhand() : ItemStack.EMPTY).getItem()))) {
 			speed = (double) 0.2;
-			Yaw = (double) (entity.rotationYaw);
+			Yaw = (double) (sourceentity.rotationYaw);
 			entity.setMotion(((speed) * Math.cos((((Yaw) + 90) * (Math.PI / 180)))), (entity.getMotion().getY()),
 					((speed) * Math.sin((((Yaw) + 90) * (Math.PI / 180)))));
 		}
