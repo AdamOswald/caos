@@ -54,6 +54,7 @@ public class EmpoweredRiftBladeItem extends CaosModElements.ModElement {
 				{
 					Map<String, Object> $_dependencies = new HashMap<>();
 					$_dependencies.put("entity", entity);
+				    $_dependencies.put("sourceentity", sourceentity);
 					RiftKnockbackProcedure.executeProcedure($_dependencies);
 				}
 				return retval;
