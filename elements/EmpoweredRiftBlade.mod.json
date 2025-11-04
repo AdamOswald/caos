@@ -8,11 +8,11 @@
     "name": "Empowered Rift Blade",
     "specialInfo": [],
     "creativeTab": {
-      "value": "TOOLS"
+      "value": "COMBAT"
     },
     "toolType": "Sword",
     "harvestLevel": 12,
-    "efficiency": 12,
+    "efficiency": 12.0,
     "attackSpeed": 1.5,
     "enchantability": 20,
     "damageVsEntity": 12.0,
@@ -22,6 +22,9 @@
     "repairItems": [],
     "immuneToFire": true,
     "stayInGridWhenCrafting": false,
-    "damageOnCrafting": false
+    "damageOnCrafting": false,
+    "onEntityHitWith": {
+      "name": "RiftKnockback"
+    }
   }
 }
