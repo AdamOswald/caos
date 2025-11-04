@@ -1,5 +1,15 @@
 package net.mcreator.caos.procedures;
 
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.common.MinecraftForge;
+
+import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.item.ItemStack;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.mcreator.caos.CaosModElements;
 import net.mcreator.caos.CaosMod;
 
@@ -37,7 +47,7 @@ public class RiftKnockbackProcedure extends CaosModElements.ModElement {
 		if (event != null && event.getEntity() != null) {
 			Entity entity = event.getEntity();
 			Entity sourceentity = event.getSource().getTrueSource();
-			Entity imediatesourceentity = event.getSource().getImmediateSource();
+			Entity immediatesourceentity = event.getSource().getImmediateSource();
 			double i = entity.getPosX();
 			double j = entity.getPosY();
 			double k = entity.getPosZ();
@@ -51,7 +61,7 @@ public class RiftKnockbackProcedure extends CaosModElements.ModElement {
 			dependencies.put("world", world);
 			dependencies.put("entity", entity);
 			dependencies.put("sourceentity", sourceentity);
-			dependencies.put("imediatesourceentity", imediatesourceentity);
+			dependencies.put("immediatesourceentity", imediatesourceentity);
 			dependencies.put("event", event);
 			this.executeProcedure(dependencies);
 		}
